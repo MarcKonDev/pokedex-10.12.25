@@ -181,3 +181,43 @@ function searchPokemon() {
         renderPokeHTML(p, originalIndex);
     }
 }
+
+
+function searchPokemon() {
+    let text = document.getElementById('search').value.toLowerCase();
+    let container = document.getElementById('pokemon');
+
+    // Wenn weniger als 3 Buchstaben -> mach einfach gar nichts
+    if (text.length < 3) {
+    container.innerHTML = "";
+    renderPokemonList();
+    return;
+}
+
+    // Container leeren
+    container.innerHTML = "";
+
+    // Über alle geladenen Pokémon gehen
+    for (let i = 0; i < loadedPokemon.length; i++) {
+        let name = loadedPokemon[i].name.toLowerCase();
+
+        // Treffer gefunden → direkt rendern
+        if (name.includes(text)) {
+            renderPokeHTML(loadedPokemon[i], i);
+        }
+    }
+}
+
+function getTypesText(pokemon) {
+    let typesText = "";
+
+    for (let i = 0; i < pokemon.types.length; i++) {
+        typesText += pokemon.types[i].type.name;
+
+        if (i < pokemon.types.length - 1) {
+            typesText += ", ";
+        }
+    }
+
+    return typesText;
+}

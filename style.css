@@ -82,7 +82,8 @@ nav{
 }
 
 .overlay_card img{
-    width: 290px;
+    max-height: 250px;
+    max-width: 250px;
 }
 
 .overlay_buttons {

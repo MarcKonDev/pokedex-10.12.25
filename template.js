@@ -2,6 +2,7 @@ function templatePokeHTML(pokemon, i) {
      return `<div class="poke_card" onclick="openOverlay(${i})">
                 <h1>#${pokemon.id} ${pokemon.name}</h1>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}">
+                <p class="poke_types">${getTypesText(pokemon)}</p>
             </div>
             `
 }
@@ -12,6 +13,7 @@ function templateOverlay(pokemon, evoChain){
                 <div class="overlay_arrow left" onclick="showPrevPokemon()">❮</div>
                 <h1>#${pokemon.id} ${pokemon.name}</h1>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="">
+                <span>${getTypesText(pokemon)}</span>
                 <div class="overlay_buttons">
                     <button onclick="openSection('main')">main</button>
                     <button onclick="openSection('stats')">stats</button>
