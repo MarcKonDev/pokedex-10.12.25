@@ -42,10 +42,77 @@ function renderPokeHTML(pokemon, i) {
     html.innerHTML += templatePokeHTML(pokemon, i);
 }
 
-function openOverlay(i) {
+async function openOverlay(i) {
     const pokemon = loadedPokemon[i];
     let overlay = document.getElementById('overlay');
     overlay.classList.remove('d_none');
-    overlay.innerHTML = renderOverlay(pokemon)
+    const evoChain = await getEvolutionChain(i);
+    overlay.innerHTML = templateOverlay(pokemon, evoChain)
 }
 
+function openSection(section) {
+    document.getElementById('main').classList.add('d_none');
+    document.getElementById('stats').classList.add('d_none');
+    document.getElementById('evo').classList.add('d_none');
+
+    document.getElementById(`${section}`).classList.remove('d_none');
+}
+
+function getAbilitiesText(pokemon) {
+    let abilitiesText = "";
+
+    for (let i = 0; i < pokemon.abilities.length; i++) {
+        abilitiesText += pokemon.abilities[i].ability.name;
+
+        if (i < pokemon.abilities.length - 1) {
+            abilitiesText += ", ";
+        }
+    }
+    return abilitiesText;
+}
+
+function getPokemonImage(pokemonName) {
+    for (let i = 0; i < loadedPokemon.length; i++) {
+        if (loadedPokemon[i].name === pokemonName) {
+            return loadedPokemon[i].sprites.front_default; 
+        }
+    }
+    return ""; 
+}
+
+async function getEvolutionChain(pokemonIndex) {
+    const pokemon = await getPokeDetails(pokemonIndex);
+    const speciesResponse = await fetch(pokemon.species.url);
+    const speciesData = await speciesResponse.json();
+    const evoChainResponse = await fetch(speciesData.evolution_chain.url);
+    const evoChainData = await evoChainResponse.json();
+
+    const evoChain = [];
+    await addEvolution(evoChainData.chain, evoChain);
+    return evoChain;
+}
+
+async function addEvolution(node, evoChain) {
+    const image = getPokemonImage(node.species.name);
+
+    evoChain.push({
+        name: node.species.name,
+        image: image
+    });
+
+    if (node.evolves_to.length > 0) {
+        await addEvolution(node.evolves_to[0], evoChain);
+    }
+}
+
+function evoChainHTML(evoChain) {
+    let html = "";
+    for (let i = 0; i < evoChain.length; i++) {
+        html += templateEvoPokemon(evoChain[i]);  
+
+        if (i < evoChain.length - 1) {
+            html += templateEvoArrow();
+        }
+    }
+    return html;
+}

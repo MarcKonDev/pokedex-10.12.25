@@ -48,3 +48,50 @@
 .overlay_card img{
     width: 300px;
 }
+
+.overlay_buttons {
+    display: flex;      
+    width: 100%;         
+    gap: 5px;            
+}
+
+.overlay_buttons button {
+    flex: 1;             
+    padding: 10px;       
+    border: none;
+    cursor: pointer;
+    background-color: blue;
+    color: white;
+    box-sizing: border-box; 
+}
+
+.overlay_buttons button:hover {
+    flex: 1;            
+    padding: 10px;       
+    border: none;
+    cursor: pointer;
+    background-color: rgb(0, 0, 149);
+    color: white;
+    box-sizing: border-box; 
+}
+
+.evo_chain {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    flex-wrap: wrap; 
+}
+
+.evo_pokemon {
+    text-align: center;
+}
+
+.evo_pokemon img {
+    width: 80px;
+    height: 80px;
+}
+
+.evo_arrow {
+    font-size: 24px;
+    font-weight: bold;
+}
