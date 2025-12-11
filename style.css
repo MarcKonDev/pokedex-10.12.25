@@ -1,9 +1,35 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
 .d_none {
     display: none!important;
 }
 
 .no-scroll {
     overflow: hidden;
+}
+html{
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body{
+    position: relative;
+    margin: 0;
+    min-height: 100%;
+    padding-bottom: 140px;
+    box-sizing: inherit;
+}
+
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background-color: #06242E;
+    margin-bottom: 20px;
 }
 
 .pokemon_cards{
@@ -28,6 +54,12 @@
     width: 150px;
 }
 
+.load_more{
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+}
+
 #overlay{
     position: fixed;
     top: 0;
@@ -50,7 +82,7 @@
 }
 
 .overlay_card img{
-    width: 300px;
+    width: 290px;
 }
 
 .overlay_buttons {
@@ -123,9 +155,23 @@
 }
 
 .overlay_arrow.left {
-    left: 5px;  /* Abstand zum Bild / Rand */
+    left: 2px;  /* Abstand zum Bild / Rand */
 }
 
 .overlay_arrow.right {
-    right: 5px
+    right: 2px
+}
+
+footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+    background-color: #06242E;
+    margin-top: 20px;
+    color: white;
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 0;
 }

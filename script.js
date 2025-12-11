@@ -42,6 +42,20 @@ function renderPokeHTML(pokemon, i) {
     html.innerHTML += templatePokeHTML(pokemon, i);
 }
 
+async function loadMore() {
+    offset += limit;  // offset erhöhen
+
+    const oldLength = allPokemon.length; // merken, wie viele schon da sind
+    await getAllPoke();  // neue Pokémon laden
+
+    // nur die neuen Pokémon rendern
+    for (let i = oldLength; i < allPokemon.length; i++) {
+        const pokemon = await getPokeDetails(i);
+        renderPokeHTML(pokemon, i);
+    }
+}
+
+
 async function openOverlay(i) {
     currentOverlayIndex = i;
     const pokemon = loadedPokemon[i];
