@@ -153,3 +153,31 @@ function evoChainHTML(evoChain) {
     }
     return html;
 }
+
+function searchPokemon() {
+    let searchText = document.getElementById('search').value.toLowerCase();
+    let container = document.getElementById('pokemon');
+
+    if (searchText.length < 3) {
+        container.innerHTML = "";
+        renderPokemonList(); 
+        return;
+    }
+
+    let results = [];
+
+    for (let i = 0; i < loadedPokemon.length; i++) {
+        let name = loadedPokemon[i].name.toLowerCase();
+
+        if (name.includes(searchText)) {
+            results.push({ pokemon: loadedPokemon[i], index: i });
+        }
+    }
+
+    container.innerHTML = "";
+    for (let j = 0; j < results.length; j++) {
+        let p = results[j].pokemon;
+        let originalIndex = results[j].index;
+        renderPokeHTML(p, originalIndex);
+    }
+}

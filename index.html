@@ -11,7 +11,7 @@
 <body onload="init()">
     <nav>
         <a href="./index.html"><img src="./img/logo.png" alt="Pokedex Logo"></a>
-        <input type="search" placeholder="Pokémon suchen..">
+        <input type="search" placeholder="Pokémon suchen.." id="search" oninput="searchPokemon()">
     </nav>
     <div id="pokemon" class="pokemon_cards"></div>
     <div id="overlay" class="d_none" onclick="closeOverlay(event)">OVERLAY</div>
