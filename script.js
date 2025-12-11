@@ -43,12 +43,35 @@ function renderPokeHTML(pokemon, i) {
 }
 
 async function openOverlay(i) {
+    currentOverlayIndex = i;
     const pokemon = loadedPokemon[i];
     let overlay = document.getElementById('overlay');
     overlay.classList.remove('d_none');
+    document.body.classList.add('no-scroll');
     const evoChain = await getEvolutionChain(i);
     overlay.innerHTML = templateOverlay(pokemon, evoChain)
 }
+
+function showPrevPokemon() {
+    if (currentOverlayIndex > 0) {
+        openOverlay(currentOverlayIndex - 1);
+    }
+}
+
+function showNextPokemon() {
+    if (currentOverlayIndex < loadedPokemon.length - 1) {
+        openOverlay(currentOverlayIndex + 1);
+    }
+}
+
+function closeOverlay(event) {
+    // Prüfen: wurde wirklich NUR der dunkle Hintergrund angeklickt?
+    if (event.target.id === "overlay") {
+        document.getElementById("overlay").classList.add("d_none");
+        document.body.classList.remove('no-scroll');
+    }
+}
+
 
 function openSection(section) {
     document.getElementById('main').classList.add('d_none');

@@ -7,7 +7,9 @@ function templatePokeHTML(pokemon, i) {
 }
 
 function templateOverlay(pokemon, evoChain){
-    return `<div class="overlay_card">
+    return `
+            <div class="overlay_card">
+                <div class="overlay_arrow left" onclick="showPrevPokemon()">❮</div>
                 <h1>#${pokemon.id} ${pokemon.name}</h1>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="">
                 <div class="overlay_buttons">
@@ -32,7 +34,9 @@ function templateOverlay(pokemon, evoChain){
                 <div class="evo_chain d_none" id="evo">
                     ${evoChainHTML(evoChain)}
                 </div>
-            </div>`
+                <div class="overlay_arrow right" onclick="showNextPokemon()">❯</div>
+            </div>
+            `
 }
 
 function templateEvoPokemon(pokemon) {

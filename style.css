@@ -2,6 +2,10 @@
     display: none!important;
 }
 
+.no-scroll {
+    overflow: hidden;
+}
+
 .pokemon_cards{
     display: flex;
     justify-content: center;
@@ -94,4 +98,34 @@
 .evo_arrow {
     font-size: 24px;
     font-weight: bold;
+}
+
+.overlay_card {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    position: relative;  /* Wichtig! */
+    border-radius: 10px;
+}
+
+.overlay_arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 36px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    user-select: none;
+    z-index: 20;
+}
+
+.overlay_arrow.left {
+    left: 5px;  /* Abstand zum Bild / Rand */
+}
+
+.overlay_arrow.right {
+    right: 5px
 }
