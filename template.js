@@ -2,7 +2,7 @@ function templatePokeHTML(pokemon, i) {
     return `
         <div class="poke_card" onclick="openOverlay(${i})"
              style="background: ${getTypeColor(pokemon)};">
-            <h1>#${pokemon.id} ${pokemon.name}</h1>
+            <div class="card_head"><h2>#${pokemon.id} ${pokemon.name[0].toUpperCase() + pokemon.name.slice(1)}</h2></div>
             <img src="${pokemon.sprites.other['official-artwork'].front_default}">
             
             <div class="type_container">
@@ -17,8 +17,7 @@ function templatePokeHTML(pokemon, i) {
 function templateOverlay(pokemon, evoChain){
     return `
             <div class="overlay_card">
-                <div class="overlay_arrow left" onclick="showPrevPokemon()">❮</div>
-                <h1>#${pokemon.id} ${pokemon.name}</h1>
+                <div class="card_head"><h2>#${pokemon.id} ${pokemon.name[0].toUpperCase() + pokemon.name.slice(1)}</h2></div>
                 <img src="${pokemon.sprites.other['official-artwork'].front_default}" alt="">
                 <div class="type_container">
     ${getTypeIcons(pokemon)}
@@ -45,7 +44,10 @@ function templateOverlay(pokemon, evoChain){
                 <div class="evo_chain d_none" id="evo">
                     ${evoChainHTML(evoChain)}
                 </div>
-                <div class="overlay_arrow right" onclick="showNextPokemon()">❯</div>
+                <div class="overlay_arrow_container">
+                    <span class="overlay_arrow left" onclick="showPrevPokemon()">❮</span>
+                    <span class="overlay_arrow right" onclick="showNextPokemon()">❯</span>
+                </div>
             </div>
             `
 }
@@ -54,7 +56,7 @@ function templateEvoPokemon(pokemon) {
     return `
         <div class="evo_pokemon">
             <img src="${pokemon.image}" alt="${pokemon.name}">
-            <p>${pokemon.name}</p>
+            <p>${pokemon.name[0].toUpperCase() + pokemon.name.slice(1)}</p>
         </div>
     `;
 }
@@ -62,3 +64,13 @@ function templateEvoPokemon(pokemon) {
 function templateEvoArrow() {
     return `<div class="evo_arrow">→</div>`;
 }
+
+function templateSearch(){
+    return `
+            <div class="no_results">
+                <h2>Keine Pokémon gefunden!</h2>
+                <p>Hat sich vielleicht ein Schreibfehler eingeschlichen?</p>
+            </div>
+        `;
+}
+

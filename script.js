@@ -5,24 +5,49 @@ let BASE_URL = "https://pokeapi.co/api/v2/pokemon?";
 let allPokemon = [];
 let loadedPokemon = [];
 
+const TYPE_STYLES = {
+    fire:     { color: "#F08030", icon: "🔥" },
+    water:    { color: "#6890F0", icon: "💧" },
+    grass:    { color: "#78C850", icon: "🍃" },
+    electric: { color: "#F8D030", icon: "⚡" },
+    ice:      { color: "#98D8D8", icon: "❄️" },
+    fighting: { color: "#C03028", icon: "🥊" },
+    poison:   { color: "#A040A0", icon: "☠️" },
+    ground:   { color: "#E0C068", icon: "🌍" },
+    flying:   { color: "#A890F0", icon: "🪽" },
+    psychic:  { color: "#F85888", icon: "🔮" },
+    bug:      { color: "#A8B820", icon: "🐛" },
+    rock:     { color: "#B8A038", icon: "🪨" },
+    ghost:    { color: "#705898", icon: "👻" },
+    dragon:   { color: "#7038F8", icon: "🐉" },
+    dark:     { color: "#705848", icon: "🌑" },
+    steel:    { color: "#B8B8D0", icon: "⚙️" },
+    fairy:    { color: "#EE99AC", icon: "🌸" },
+    normal:   { color: "#A8A878", icon: "●" }
+};
+
 async function init() {
+    showLoading();
+
     await getAllPoke();
     await renderPokemonList();
+
+    hideLoading();
 }
 
 async function getAllPoke() {
-    const response = await fetch(BASE_URL + `limit=${limit}&offset=${offset}`);      // base url abgerufen
-    const data = await response.json();                                 // base url in ein json umwandeln
+    const response = await fetch(BASE_URL + `limit=${limit}&offset=${offset}`);      
+    const data = await response.json();                                 
     
-    for (let i = 0; i < data.results.length; i++) {                     // durch die results durchiterieren    
-        allPokemon.push(data.results[i]);                               // alle results mit dem Index an globales allPokemon Array übergeben
+    for (let i = 0; i < data.results.length; i++) {                     
+        allPokemon.push(data.results[i]);                               
     }
 }
 
-async function getPokeDetails(index) {                                  // die Details der Pokemons abrufen
-    if (!loadedPokemon[index]) {                                        // falls das Pokemon mit bestimmtem Index noch nicht in loadedPokemon ist, dann..
-        const response = await fetch(allPokemon[index].url);            // Url der eizelnen Pokemon abrufen 
-        const pokemonDetails = await response.json();                   // in ein json umwandeln
+async function getPokeDetails(index) {                                  
+    if (!loadedPokemon[index]) {                                        
+        const response = await fetch(allPokemon[index].url);             
+        const pokemonDetails = await response.json();                   
         loadedPokemon[index] = pokemonDetails;
     }
     console.log(loadedPokemon);
@@ -31,8 +56,8 @@ async function getPokeDetails(index) {                                  // die D
 }
 
 async function renderPokemonList() {                                    
-    for (let i = 0; i < allPokemon.length; i++) {                       // geht durch allPokemon array (liste aller Pokemon mit name und url) durch
-        const pokemon = await getPokeDetails(i);                        // ruft getPokeDetails auf und speichert in pokemon
+    for (let i = 0; i < allPokemon.length; i++) {                       
+        const pokemon = await getPokeDetails(i);                        
         renderPokeHTML(pokemon, i); 
     }
 }
@@ -43,18 +68,19 @@ function renderPokeHTML(pokemon, i) {
 }
 
 async function loadMore() {
-    offset += limit;  // offset erhöhen
+    showLoading();
 
-    const oldLength = allPokemon.length; // merken, wie viele schon da sind
-    await getAllPoke();  // neue Pokémon laden
+    const oldLength = allPokemon.length;
+    offset += limit;
+    await getAllPoke();
 
-    // nur die neuen Pokémon rendern
     for (let i = oldLength; i < allPokemon.length; i++) {
         const pokemon = await getPokeDetails(i);
         renderPokeHTML(pokemon, i);
     }
-}
 
+    hideLoading();
+}
 
 async function openOverlay(i) {
     currentOverlayIndex = i;
@@ -79,13 +105,11 @@ function showNextPokemon() {
 }
 
 function closeOverlay(event) {
-    // Prüfen: wurde wirklich NUR der dunkle Hintergrund angeklickt?
     if (event.target.id === "overlay") {
         document.getElementById("overlay").classList.add("d_none");
         document.body.classList.remove('no-scroll');
     }
 }
-
 
 function openSection(section) {
     document.getElementById('main').classList.add('d_none');
@@ -157,7 +181,6 @@ function evoChainHTML(evoChain) {
 function searchPokemon() {
     let searchText = document.getElementById('search').value.toLowerCase();
     let container = document.getElementById('pokemon');
-
     if (searchText.length < 3) {
         container.innerHTML = "";
         renderPokemonList(); 
@@ -165,10 +188,8 @@ function searchPokemon() {
     }
 
     let results = [];
-
     for (let i = 0; i < loadedPokemon.length; i++) {
         let name = loadedPokemon[i].name.toLowerCase();
-
         if (name.includes(searchText)) {
             results.push({ pokemon: loadedPokemon[i], index: i });
         }
@@ -182,29 +203,35 @@ function searchPokemon() {
     }
 }
 
-
 function searchPokemon() {
     let text = document.getElementById('search').value.toLowerCase();
-    let container = document.getElementById('pokemon');
 
-    // Wenn weniger als 3 Buchstaben -> mach einfach gar nichts
     if (text.length < 3) {
-    container.innerHTML = "";
-    renderPokemonList();
-    return;
+        document.getElementById('pokemon').innerHTML = "";
+        renderPokemonList();
+        showLoadMore();             
+        return;
+    }
+
+    hideLoadMore();                
+    renderSearchResults(text);
 }
 
-    // Container leeren
+function renderSearchResults(searchText) {
+    let container = document.getElementById('pokemon');
     container.innerHTML = "";
 
-    // Über alle geladenen Pokémon gehen
+    let found = false;
     for (let i = 0; i < loadedPokemon.length; i++) {
         let name = loadedPokemon[i].name.toLowerCase();
-
-        // Treffer gefunden → direkt rendern
-        if (name.includes(text)) {
+        if (name.includes(searchText)) {
             renderPokeHTML(loadedPokemon[i], i);
+            found = true;
         }
+    }
+
+    if (!found) {
+        container.innerHTML = templateSearch();
     }
 }
 
@@ -222,28 +249,6 @@ function getTypesText(pokemon) {
     return typesText;
 }
 
-// Typ-Symbole + Farben
-const TYPE_STYLES = {
-    fire:     { color: "#F08030", icon: "🔥" },
-    water:    { color: "#6890F0", icon: "💧" },
-    grass:    { color: "#78C850", icon: "🍃" },
-    electric: { color: "#F8D030", icon: "⚡" },
-    ice:      { color: "#98D8D8", icon: "❄️" },
-    fighting: { color: "#C03028", icon: "🥊" },
-    poison:   { color: "#A040A0", icon: "☠️" },
-    ground:   { color: "#E0C068", icon: "🌍" },
-    flying:   { color: "#A890F0", icon: "🪽" },
-    psychic:  { color: "#F85888", icon: "🔮" },
-    bug:      { color: "#A8B820", icon: "🐛" },
-    rock:     { color: "#B8A038", icon: "🪨" },
-    ghost:    { color: "#705898", icon: "👻" },
-    dragon:   { color: "#7038F8", icon: "🐉" },
-    dark:     { color: "#705848", icon: "🌑" },
-    steel:    { color: "#B8B8D0", icon: "⚙️" },
-    fairy:    { color: "#EE99AC", icon: "🌸" },
-    normal:   { color: "#A8A878", icon: "●" }
-};
-
 function getTypeIcons(pokemon) {
     let html = "";
 
@@ -257,11 +262,30 @@ function getTypeIcons(pokemon) {
             </div>
         `;
     }
-
     return html;
 }
 
 function getTypeColor(pokemon) {
-    const type = pokemon.types[0].type.name;  // Haupttyp nehmen (1. Typ)
+    const type = pokemon.types[0].type.name; 
     return TYPE_STYLES[type].color;
+}
+
+function hideLoadMore() {
+    document.getElementById('load_more_btn').style.display = "none";
+}
+
+function showLoadMore() {
+    document.getElementById('load_more_btn').style.display = "block";
+}
+
+function showLoading() {
+    document.getElementById("loading_spinner").classList.remove("d_none");
+    document.getElementById("loading_overlay").classList.remove("d_none");
+    document.body.classList.add("no-scroll");
+}
+
+function hideLoading() {
+    document.getElementById("loading_spinner").classList.add("d_none");
+    document.getElementById("loading_overlay").classList.add("d_none");
+    document.body.classList.remove("no-scroll");
 }
