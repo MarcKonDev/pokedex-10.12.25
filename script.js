@@ -221,3 +221,47 @@ function getTypesText(pokemon) {
 
     return typesText;
 }
+
+// Typ-Symbole + Farben
+const TYPE_STYLES = {
+    fire:     { color: "#F08030", icon: "🔥" },
+    water:    { color: "#6890F0", icon: "💧" },
+    grass:    { color: "#78C850", icon: "🍃" },
+    electric: { color: "#F8D030", icon: "⚡" },
+    ice:      { color: "#98D8D8", icon: "❄️" },
+    fighting: { color: "#C03028", icon: "🥊" },
+    poison:   { color: "#A040A0", icon: "☠️" },
+    ground:   { color: "#E0C068", icon: "🌍" },
+    flying:   { color: "#A890F0", icon: "🪽" },
+    psychic:  { color: "#F85888", icon: "🔮" },
+    bug:      { color: "#A8B820", icon: "🐛" },
+    rock:     { color: "#B8A038", icon: "🪨" },
+    ghost:    { color: "#705898", icon: "👻" },
+    dragon:   { color: "#7038F8", icon: "🐉" },
+    dark:     { color: "#705848", icon: "🌑" },
+    steel:    { color: "#B8B8D0", icon: "⚙️" },
+    fairy:    { color: "#EE99AC", icon: "🌸" },
+    normal:   { color: "#A8A878", icon: "●" }
+};
+
+function getTypeIcons(pokemon) {
+    let html = "";
+
+    for (let i = 0; i < pokemon.types.length; i++) {
+        const type = pokemon.types[i].type.name;
+        const style = TYPE_STYLES[type];
+
+        html += `
+            <div class="type_badge" style="background:${style.color}">
+                ${style.icon}
+            </div>
+        `;
+    }
+
+    return html;
+}
+
+function getTypeColor(pokemon) {
+    const type = pokemon.types[0].type.name;  // Haupttyp nehmen (1. Typ)
+    return TYPE_STYLES[type].color;
+}

@@ -176,3 +176,21 @@ footer{
     left: 0;
     bottom: 0;
 }
+
+.type_container {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.type_badge {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 3px rgba(0,0,0,0.4);
+}
