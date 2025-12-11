@@ -12,8 +12,6 @@ function templatePokeHTML(pokemon, i) {
     `;
 }
 
-
-
 function templateOverlay(pokemon, evoChain){
     return `
             <div class="overlay_card">
@@ -73,4 +71,3 @@ function templateSearch(){
             </div>
         `;
 }
-
