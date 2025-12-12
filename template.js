@@ -66,8 +66,17 @@ function templateEvoArrow() {
 function templateSearch(){
     return `
             <div class="no_results">
-                <h2>Keine Pokémon gefunden!</h2>
-                <p>Hat sich vielleicht ein Schreibfehler eingeschlichen?</p>
+                <h2>No Pokémon found!</h2>
+                <p>Perhaps there is a typo?</p>
+            </div>
+        `;
+}
+
+function loadingError(){
+    return `
+            <div class="no_results">
+                <h2>Error loading!</h2>
+                <p>Please try again later.</p>
             </div>
         `;
 }

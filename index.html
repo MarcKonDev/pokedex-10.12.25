@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokedex</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./img/fav.png" type="image/x-icon">
 </head>
+
 <body onload="init()">
     <div id="loading_overlay" class="loading_overlay d_none"></div>
     <div id="loading_spinner" class="spinner d_none"></div>
@@ -14,9 +16,11 @@
         <a href="./index.html"><img src="./img/logo.png" alt="Pokedex Logo"></a>
         <input type="search" placeholder="Pokémon suchen.." id="search" oninput="searchPokemon()">
     </nav>
-    <div id="pokemon" class="pokemon_cards"></div>
-    <div id="overlay" class="d_none" onclick="closeOverlay(event)">OVERLAY</div>
-    <div class="load_more"><button id="load_more_btn" onclick="loadMore()">Mehr laden</button></div>
+    <main>
+        <div id="pokemon" class="pokemon_cards"></div>
+        <div id="overlay" class="d_none" onclick="closeOverlay(event)">OVERLAY</div>
+        <div class="load_more"><button id="load_more_btn" onclick="loadMore()">Load more</button></div>
+    </main>
     <footer>
         <img src="./img/logo.png" alt="Pokedex Logo">
         <p>Marc's Pokedex</p>
@@ -24,4 +28,5 @@
 </body>
 <script src="./script.js"></script>
 <script src="./template.js"></script>
+
 </html>

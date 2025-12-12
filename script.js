@@ -5,6 +5,8 @@ let BASE_URL = "https://pokeapi.co/api/v2/pokemon?";
 let allPokemon = [];
 let loadedPokemon = [];
 
+let scrollY = 0;
+
 const TYPE_STYLES = {
     fire:     { color: "#F08030", icon: "🔥" },
     water:    { color: "#6890F0", icon: "💧" },
@@ -29,19 +31,30 @@ const TYPE_STYLES = {
 async function init() {
     showLoading();
 
-    await getAllPoke();
-    await renderPokemonList();
-
-    hideLoading();
+    try {
+        await getAllPoke();          
+        await renderPokemonList();   
+    } catch (error) {
+        console.error("Error in init():", error);
+        document.getElementById("pokemon").innerHTML = loadingError();
+    } finally {
+        hideLoading();               
+    }
 }
 
+
 async function getAllPoke() {
-    const response = await fetch(BASE_URL + `limit=${limit}&offset=${offset}`);      
-    const data = await response.json();                                 
-    
-    for (let i = 0; i < data.results.length; i++) {                     
-        allPokemon.push(data.results[i]);                               
-    }
+    try {
+        const response = await fetch(BASE_URL + `limit=${limit}&offset=${offset}`);
+        const data = await response.json();
+
+        for (let i = 0; i < data.results.length; i++) {
+            allPokemon.push(data.results[i]);
+        }
+    } catch (error) {
+        console.error("Error in getAllPoke():", error);
+        document.getElementById("pokemon").innerHTML = loadingError();
+    } 
 }
 
 async function getPokeDetails(index) {                                  
@@ -50,8 +63,6 @@ async function getPokeDetails(index) {
         const pokemonDetails = await response.json();                   
         loadedPokemon[index] = pokemonDetails;
     }
-    console.log(loadedPokemon);
-    
     return loadedPokemon[index]
 }
 
@@ -86,10 +97,15 @@ async function openOverlay(i) {
     currentOverlayIndex = i;
     const pokemon = loadedPokemon[i];
     let overlay = document.getElementById('overlay');
+
     overlay.classList.remove('d_none');
-    document.body.classList.add('no-scroll');
+
+    lockScroll(); 
+
     const evoChain = await getEvolutionChain(i);
-    overlay.innerHTML = templateOverlay(pokemon, evoChain)
+    overlay.innerHTML = templateOverlay(pokemon, evoChain);
+
+    overlay.addEventListener("click", closeOverlay);
 }
 
 function showPrevPokemon() {
@@ -107,7 +123,7 @@ function showNextPokemon() {
 function closeOverlay(event) {
     if (event.target.id === "overlay") {
         document.getElementById("overlay").classList.add("d_none");
-        document.body.classList.remove('no-scroll');
+        unlockScroll();
     }
 }
 
@@ -288,4 +304,17 @@ function hideLoading() {
     document.getElementById("loading_spinner").classList.add("d_none");
     document.getElementById("loading_overlay").classList.add("d_none");
     document.body.classList.remove("no-scroll");
+}
+
+function lockScroll() {
+    scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+}
+
+function unlockScroll() {
+    document.body.style.position = "";
+    document.body.style.top = "";
+    window.scrollTo(0, scrollY);
 }

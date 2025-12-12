@@ -7,10 +7,6 @@
     display: none !important;
 }
 
-.no-scroll {
-    overflow: hidden;
-}
-
 html {
     height: 100%;
     box-sizing: border-box;
@@ -31,6 +27,12 @@ nav {
     padding: 10px 16px;
     background-color: #06242E;
     margin-bottom: 20px;
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
 }
 
 .pokemon_cards {
@@ -75,7 +77,7 @@ nav {
     margin-top: 16px;
 }
 
-#load_more_btn{
+#load_more_btn {
     border: none;
     background-color: #0C3949;
     color: white;
@@ -85,7 +87,7 @@ nav {
     cursor: pointer;
 }
 
-#load_more_btn:hover{
+#load_more_btn:hover {
     background-color: #105063;
 }
 
@@ -110,9 +112,9 @@ nav {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 16px;       
-    overflow: hidden;        
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .overlay_card img {
@@ -127,7 +129,8 @@ nav {
     background-color: #0C3949;
 }
 
-.main, .stats{
+.main,
+.stats {
     width: 100%;
     background-color: #0C3949;
     color: white;
@@ -136,7 +139,7 @@ nav {
     padding-top: 12px;
 }
 
-.evo_chain{
+.evo_chain {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,8 +148,8 @@ nav {
     width: 100%;
     background-color: #0C3949;
     color: white;
-    padding: 10px 0px;
-    height: 160px;
+    padding: 10px 0px 25px 0px;
+
 }
 
 .overlay_buttons button {
@@ -202,9 +205,9 @@ nav {
     padding: 12px 20px;
     color: white;
     background-color: #0C3949;
-    position: absolute; 
-    bottom: 0;          
-    left: 0;  
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .overlay_arrow.left {
@@ -277,7 +280,7 @@ footer {
     width: 45px;
     height: 45px;
     animation: spin 0.8s linear infinite;
-    z-index: 1001; 
+    z-index: 1001;
 }
 
 .loading_overlay {
@@ -286,20 +289,59 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.35); 
-    z-index: 1000; 
-    backdrop-filter: blur(2px); 
+    background: rgba(0, 0, 0, 1);
+    z-index: 1000;
+    backdrop-filter: blur(2px);
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
-.no_results{
+.no_results {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 400px;
+}
+
+@media (max-width: 490px) {
+    .poke_card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: gray;
+        width: 130px;
+        border: solid 2px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+    }
+
+    .card_head h2 {
+        font-size: 18px;
+    }
+
+    .poke_card img {
+        width: 120px;
+    }
+
+    nav{
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 0 20px 0;
+    }
+    
+    nav input{
+        width: 80%;
+    }
 }
