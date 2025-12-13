@@ -29,7 +29,7 @@ const TYPE_STYLES = {
 };
 
 async function init() {
-    showLoading();
+    toggleLoading(true);
 
     try {
         await getAllPoke();          
@@ -38,7 +38,7 @@ async function init() {
         console.error("Error in init():", error);
         document.getElementById("pokemon").innerHTML = loadingError();
     } finally {
-        hideLoading();               
+        toggleLoading(false);               
     }
 }
 
@@ -78,7 +78,7 @@ function renderPokeHTML(pokemon, i) {
 }
 
 async function loadMore() {
-    showLoading();
+    toggleLoading(true);
 
     const oldLength = allPokemon.length;
     offset += limit;
@@ -89,7 +89,7 @@ async function loadMore() {
         renderPokeHTML(pokemon, i);
     }
 
-    hideLoading();
+    toggleLoading(false);
 }
 
 async function openOverlay(i) {
@@ -99,7 +99,7 @@ async function openOverlay(i) {
 
     overlay.classList.remove('d_none');
 
-    lockScroll(); 
+    toggleScrollLock(true);
 
     const evoChain = await getEvolutionChain(i);
     overlay.innerHTML = templateOverlay(pokemon, evoChain);
@@ -122,7 +122,7 @@ function showNextPokemon() {
 function closeOverlay(event) {
     if (event.target.id === "overlay") {
         document.getElementById("overlay").classList.add("d_none");
-        unlockScroll();
+        toggleScrollLock(false);
     }
 }
 
@@ -219,16 +219,18 @@ function searchPokemon() {
 }
 
 function searchPokemon() {
-    let text = document.getElementById('search').value.toLowerCase();
+    const text = document.getElementById('search').value.toLowerCase();
 
     if (text.length < 3) {
+        // Weniger als 3 Zeichen: komplette Liste anzeigen + Load More Button
         document.getElementById('pokemon').innerHTML = "";
         renderPokemonList();
-        showLoadMore();             
+        toggleLoadMore(true);
         return;
     }
 
-    hideLoadMore();                
+    // Suche aktiviert → Load More Button ausblenden
+    toggleLoadMore(false);
     renderSearchResults(text);
 }
 
@@ -285,35 +287,40 @@ function getTypeColor(pokemon) {
     return TYPE_STYLES[type].color;
 }
 
-function hideLoadMore() {
-    document.getElementById('load_more_btn').style.display = "none";
+function toggleLoadMore(show) {
+    const button = document.getElementById('load_more_btn');
+
+    if (show) {
+        button.classList.remove('d_none');
+    } else {
+        button.classList.add('d_none');
+    }
 }
 
-function showLoadMore() {
-    document.getElementById('load_more_btn').style.display = "block";
+
+function toggleLoading(show) {
+    const spinner = document.getElementById("loading_spinner");
+    const overlay = document.getElementById("loading_overlay");
+
+    if (show) {
+        spinner.classList.remove("d_none");
+        overlay.classList.remove("d_none");
+    } else {
+        spinner.classList.add("d_none");
+        overlay.classList.add("d_none");
+    }
 }
 
-function showLoading() {
-    document.getElementById("loading_spinner").classList.remove("d_none");
-    document.getElementById("loading_overlay").classList.remove("d_none");
-    document.body.classList.add("no-scroll");
-}
-
-function hideLoading() {
-    document.getElementById("loading_spinner").classList.add("d_none");
-    document.getElementById("loading_overlay").classList.add("d_none");
-    document.body.classList.remove("no-scroll");
-}
-
-function lockScroll() {
-    scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
-}
-
-function unlockScroll() {
-    document.body.style.position = "";
-    document.body.style.top = "";
-    window.scrollTo(0, scrollY);
+function toggleScrollLock(lock) {
+    if (lock) {
+        scrollY = window.scrollY;
+        document.body.style.position = "fixed";
+        document.body.style.top = `-${scrollY}px`;
+        document.body.style.width = "100%";
+    } else {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        window.scrollTo(0, scrollY);
+    }
 }
