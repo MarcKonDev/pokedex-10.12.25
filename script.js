@@ -42,7 +42,6 @@ async function init() {
     }
 }
 
-
 async function getAllPoke() {
     try {
         const response = await fetch(BASE_URL + `limit=${limit}&offset=${offset}`);
