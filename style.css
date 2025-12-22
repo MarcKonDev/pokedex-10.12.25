@@ -25,7 +25,7 @@ nav {
     margin-bottom: 20px;
 }
 
-.navigation{
+.navigation {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,7 +34,7 @@ nav {
     margin: auto;
 }
 
-nav input{
+nav input {
     width: 200px;
 }
 
@@ -143,11 +143,20 @@ main {
     width: 100%;
     background-color: #0C3949;
     color: white;
-    padding: 10px 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     height: 100%;
-    padding-top: 12px;
+
 }
 
+.main{
+    padding-top: 10px;
+    line-height: 1.4;    
+}
+
+.stats {
+    padding-top: 5px;
+}
 .evo_chain {
     display: flex;
     align-items: center;
@@ -350,8 +359,37 @@ footer {
         align-items: center;
         padding: 10px 0 20px 0;
     }
-    
-    .navigation input{
+
+    .navigation input {
         width: 80%;
     }
+}
+
+.stat_bar_container {
+    width: 100%;
+    border: solid 4px rgb(13, 0, 0);
+    border-radius: 6px;
+    height: 16px;
+    overflow: hidden;
+    margin: 2px 0;
+    align-items: center;
+}
+
+.stat_bar {
+    height: 100%;
+    border-radius: 6px;
+    background-color: #ef7127;
+    text-align: right;
+    padding-right: 4px;
+    color: white;
+    white-space: nowrap;
+}
+
+.stat_row {
+    display:flex; 
+    align-items:center; 
+    gap:20px; 
+    margin-bottom:0px;
+    display: grid;
+    grid-template-columns: auto 170px;
 }

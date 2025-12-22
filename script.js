@@ -1,11 +1,13 @@
 let limit = 20;
 let offset = 0;
-let BASE_URL = "https://pokeapi.co/api/v2/pokemon?";
+let BASE_URL = "https://pokeapi.co/api/v2/pokemon";
 
 let allPokemon = [];
 let loadedPokemon = [];
 
 let scrollY = 0;
+
+let currentOverlayIndex = 0;
 
 const TYPE_STYLES = {
     fire:     { color: "#F08030", icon: "🔥" },
@@ -44,7 +46,7 @@ async function init() {
 
 async function getAllPoke() {
     try {
-        const response = await fetch(BASE_URL + `limit=${limit}&offset=${offset}`);
+        const response = await fetch(BASE_URL + `?limit=${limit}&offset=${offset}`);
         const data = await response.json();
 
         for (let i = 0; i < data.results.length; i++) {
@@ -65,10 +67,13 @@ async function getPokeDetails(index) {
     return loadedPokemon[index]
 }
 
-async function renderPokemonList() {                                    
-    for (let i = 0; i < allPokemon.length; i++) {                       
-        const pokemon = await getPokeDetails(i);                        
-        renderPokeHTML(pokemon, i); 
+async function renderPokemonList() {
+    const container = document.getElementById('pokemon');
+    container.innerHTML = "";
+
+    for (let i = 0; i < allPokemon.length; i++) {
+        const pokemon = await getPokeDetails(i);
+        renderPokeHTML(pokemon, i);
     }
 }
 
@@ -103,8 +108,6 @@ async function openOverlay(i) {
 
     const evoChain = await getEvolutionChain(i);
     overlay.innerHTML = templateOverlay(pokemon, evoChain);
-
-    overlay.addEventListener("click", closeOverlay);
 }
 
 function showPrevPokemon() {
@@ -194,42 +197,14 @@ function evoChainHTML(evoChain) {
 }
 
 function searchPokemon() {
-    let searchText = document.getElementById('search').value.toLowerCase();
-    let container = document.getElementById('pokemon');
-    if (searchText.length < 3) {
-        container.innerHTML = "";
-        renderPokemonList(); 
-        return;
-    }
-
-    let results = [];
-    for (let i = 0; i < loadedPokemon.length; i++) {
-        let name = loadedPokemon[i].name.toLowerCase();
-        if (name.includes(searchText)) {
-            results.push({ pokemon: loadedPokemon[i], index: i });
-        }
-    }
-
-    container.innerHTML = "";
-    for (let j = 0; j < results.length; j++) {
-        let p = results[j].pokemon;
-        let originalIndex = results[j].index;
-        renderPokeHTML(p, originalIndex);
-    }
-}
-
-function searchPokemon() {
     const text = document.getElementById('search').value.toLowerCase();
 
     if (text.length < 3) {
-        // Weniger als 3 Zeichen: komplette Liste anzeigen + Load More Button
-        document.getElementById('pokemon').innerHTML = "";
         renderPokemonList();
         toggleLoadMore(true);
         return;
     }
 
-    // Suche aktiviert → Load More Button ausblenden
     toggleLoadMore(false);
     renderSearchResults(text);
 }
@@ -324,3 +299,9 @@ function toggleScrollLock(lock) {
         window.scrollTo(0, scrollY);
     }
 }
+
+function createStatBar(statName, statValue, maxValue = 255) {
+    const percentage = Math.min((statValue / maxValue) * 100, 100);
+    return statBarTemplate(statName, statValue, percentage);
+}
+

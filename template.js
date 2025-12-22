@@ -26,19 +26,19 @@ function templateOverlay(pokemon, evoChain){
                     <button onclick="openSection('evo')">evo chain</button>
                 </div>
                 <div class="main" id="main">
-                    <span>heigt: ${pokemon.height}</span><br>
-                    <span>weight: ${pokemon.weight}</span><br>
-                    <span>base experience: ${pokemon.base_experience}</span><br>
-                    <span>abilities: ${getAbilitiesText(pokemon)}</span>
+                    <span>Heigt: ${pokemon.height}</span><br>
+                    <span>Weight: ${pokemon.weight}</span><br>
+                    <span>Base experience: ${pokemon.base_experience}</span><br>
+                    <span>Abilities: ${getAbilitiesText(pokemon)}</span>
                 </div>
                 <div class="stats d_none" id="stats">
-                    <span>hp: ${pokemon.stats[0].base_stat}</span><br>
-                    <span>attack: ${pokemon.stats[1].base_stat}</span><br>
-                    <span>defense: ${pokemon.stats[2].base_stat}</span><br>
-                    <span>special-attack: ${pokemon.stats[3].base_stat}</span><br>
-                    <span>special-deffense: ${pokemon.stats[4].base_stat}</span><br>
-                    <span>speed: ${pokemon.stats[5].base_stat}</span>
-                </div>
+                ${createStatBar("HP", pokemon.stats[0].base_stat)}
+                ${createStatBar("Attack", pokemon.stats[1].base_stat)}
+                ${createStatBar("Defense", pokemon.stats[2].base_stat)}
+                ${createStatBar("Sp. Atk", pokemon.stats[3].base_stat)}
+                ${createStatBar("Sp. Def", pokemon.stats[4].base_stat)}
+                ${createStatBar("Speed", pokemon.stats[5].base_stat)}
+            </div>
                 <div class="evo_chain d_none" id="evo">
                     ${evoChainHTML(evoChain)}
                 </div>
@@ -79,4 +79,15 @@ function loadingError(){
                 <p>Please try again later.</p>
             </div>
         `;
+}
+
+function statBarTemplate(statName, statValue, percentage) {
+    return `
+        <div class="stat_row">
+            <span class="stat_name">${statName}</span>
+            <div class="stat_bar_container">
+                <div class="stat_bar" style="width:${percentage}%;"></div>
+            </div>
+        </div>
+    `;
 }
